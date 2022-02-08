@@ -21,4 +21,4 @@ cp ./setup.py ./ci/app/plugins/pims-plugin-format-dicom/
 
 git clone https://github.com/cytomine/pims-plugin-format-openslide ./ci/app/plugins/pims-plugin-format-openslide
 
-sudo docker build --rm -f scripts/docker/Dockerfile-dependencies -t  cytomine/pims-plugin-format-dicom-dependencies:v$VERSION_NUMBER .
+docker build --rm -f scripts/docker/Dockerfile-dependencies -t  cytomine/pims-plugin-format-dicom-dependencies:v$VERSION_NUMBER .
