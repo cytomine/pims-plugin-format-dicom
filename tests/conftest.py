@@ -15,7 +15,6 @@
 import os
 import shutil
 from contextlib import contextmanager
-from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient

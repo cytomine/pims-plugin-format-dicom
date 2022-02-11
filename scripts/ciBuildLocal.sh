@@ -6,7 +6,7 @@ set -a
 
 rm -rf ./ci
 mkdir ./ci
-#echo "v0.0.0" > ./ci/version
+
 ./scripts/ciBuildVersion.sh
 
 ./scripts/ciCreateDependencyImage.sh
