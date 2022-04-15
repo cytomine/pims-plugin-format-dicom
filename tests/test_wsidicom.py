@@ -19,7 +19,7 @@ def get_image(path, filename):
     filepath = os.path.join(path,filename)
     # If image does not exist locally -> download image
     if not os.path.exists(path):
-        os.mkdir("/data/pims/upload_test_wsidicom")
+        os.mkdir(path)
 
     if not os.path.exists(filepath):
         try:
@@ -31,8 +31,8 @@ def get_image(path, filename):
 
     if not os.path.exists(os.path.join(path, "processed")):
         try:
-            fi = FileImporter(f"/data/pims/upload_test_wsidicom/{filename}")
-            fi.upload_dir = "/data/pims/upload_test_wsidicom"
+            fi = FileImporter(filepath)
+            fi.upload_dir = path
             fi.processed_dir = fi.upload_dir / Path("processed")
             fi.mkdir(fi.processed_dir)
         except Exception as e:
@@ -40,8 +40,8 @@ def get_image(path, filename):
             print(e)
     if not os.path.exists(os.path.join(path, "processed/visualisation.WSIDICOM")):
         if os.path.exists(os.path.join(path, "processed")):
-            fi = FileImporter(f"/data/pims/upload_test_wsidicom/{filename}")
-            fi.upload_dir = "/data/pims/upload_test_wsidicom"
+            fi = FileImporter(filepath)
+            fi.upload_dir = path
             fi.processed_dir = fi.upload_dir / Path("processed")
         try:
             fi.upload_path = Path(filepath)
@@ -62,8 +62,8 @@ def get_image(path, filename):
             
     if not os.path.exists(os.path.join(path, "processed/histogram")):
         if os.path.exists(os.path.join(path, "processed")):
-            fi = FileImporter(f"/data/pims/upload_test_wsidicom/{filename}")
-            fi.upload_dir = Path("/data/pims/upload_test_wsidicom")
+            fi = FileImporter(filepath)
+            fi.upload_dir = Path(path)
             fi.processed_dir = fi.upload_dir / Path("processed")
             original_filename = Path(f"{ORIGINAL_STEM}.WSIDICOM")
             fi.original_path = fi.processed_dir / original_filename
@@ -111,7 +111,7 @@ def test_wsidicom_info(client, image_path_wsidicom):
     response = client.get(f'/image/upload_test_wsidicom/{filename}/info')
     assert response.status_code == 200
     assert "wsidicom" in response.json()['image']['original_format'].lower()
-    wsidicom_object = WsiDicom.open(f"/data/pims/upload_test_wsidicom/processed/original.WSIDICOM/{os.path.splitext(filename)[0]}")
+    wsidicom_object = WsiDicom.open(f"{path}/processed/original.WSIDICOM/{os.path.splitext(filename)[0]}")
     
     assert response.json()['image']['width'] == wsidicom_object.levels.base_level.size.width
     assert response.json()['image']['height'] == wsidicom_object.levels.base_level.size.height
@@ -133,7 +133,7 @@ def test_wsidicom_info(client, image_path_wsidicom):
 def test_wsidicom_associated(client, image_path_wsidicom):
     path, filename = image_path_wsidicom
     response = client.get(f'/image/upload_test_wsidicom/{filename}/info')
-    wsidicom_object = WsiDicom.open(f"/data/pims/upload_test_wsidicom/processed/original.WSIDICOM/{os.path.splitext(filename)[0]}")
+    wsidicom_object = WsiDicom.open(f"{path}/processed/original.WSIDICOM/{os.path.splitext(filename)[0]}")
     
     # assume there is no associated thumbnail for now
     # idx = index of the associated image in the response dictionary

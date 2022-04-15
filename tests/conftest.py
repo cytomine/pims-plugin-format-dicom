@@ -53,8 +53,8 @@ def client(app):
 
 @pytest.fixture
 def image_path_wsidicom():
-	path = "/data/pims/upload_test_wsidicom/"
-	image = "melanoma_pilot_003.zip"
+	path = f"{test_root()}/upload_test_wsidicom/"
+	image = "AI-DRSK-026_12613.zip"
 	return [path, image]
 
 @contextmanager
